@@ -6,7 +6,7 @@
   "optimizer": {
     "type": "AdamW",
     "params": {
-      "lr": 1e-8,
+      "lr": 2e-8,
       "eps": 1.0e-8,
       "betas": [
         0.9,
@@ -31,7 +31,14 @@
   "steps_per_print": 16,
   "gradient_clipping": 1.0,
   "wall_clock_breakdown": true,
-  "bf16": {
-    "enabled": true
+  "fp16": {
+    "enabled": true,
+    "auto_cast": false,
+    "loss_scale": 0,
+    "initial_scale_power": 16,
+    "loss_scale_window": 1000,
+    "hysteresis": 2,
+    "consecutive_hysteresis": false,
+    "min_loss_scale": 1
   }
 }

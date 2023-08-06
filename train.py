@@ -35,10 +35,10 @@ def get_argument_parser():
                         default="tokenizer.model",
                         help="Tokenizer model file path")
 
-    parser.add_argument("--max_length", type=int, default=4096,
+    parser.add_argument("--max_length", type=int, default=16,
                         help="Max tokens per sentence in corpus")
 
-    parser.add_argument("--steps_per_epoch", type=int, default=4096,
+    parser.add_argument("--steps_per_epoch", type=int, default=10,
                         help="Step intervals to save checkpoint")
 
     parser.add_argument("--checkpoint_saving_path", type=str,
@@ -109,7 +109,7 @@ def prepare_data():
 
 def prepare_model():
     with deepspeed.zero.Init(config_dict_or_path=args.deepspeed_config,
-                             enabled=True,
+                             enabled=False,
                              mem_efficient_linear=False,
                              mpu=None):
         model = BaiChuanForCausalLM(BaiChuanConfig())
@@ -119,6 +119,12 @@ def prepare_model():
                                                  model=model,
                                                  optimizer=None,
                                                  model_parameters=model_parameters)
+    # 1. 保证加载权重一致
+    # 2. 保证输入input_ids一致
+    # 3. 保证单步的output一致  这里最关键
+    # 后续的不同只能是优化器，或者框架中含有额外的操作
+    model_engine.load_checkpoint(args.checkpoint_saving_path, load_module_strict=True, load_optimizer_states=False,
+                                 load_lr_scheduler_states=False, load_module_only=True)
     return model_engine
 
 
@@ -141,5 +147,6 @@ if __name__ == "__main__":
     while True:
         train(data_engine, model_engine)
         epoch += 1
-        model_engine.save_checkpoint(f"{args.checkpoint_saving_path}",
-                                     tag=f"Epoch-{epoch}")
+        # model_engine.save_checkpoint(f"{args.checkpoint_saving_path}",
+        #                              tag=f"Epoch-{epoch}")
+        break

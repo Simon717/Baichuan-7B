@@ -1,6 +1,4 @@
 #!/bin/bash
-deepspeed --hostfile config/hostfile \
---force_multi \
-train.py \
+deepspeed --num_gpus 1 train.py \
 --deepspeed \
 --deepspeed_config config/deepspeed.json
