@@ -47,7 +47,7 @@ class BaiChuanConfig(PretrainedConfig):
         vocab_size=64000,
         hidden_size=64,
         intermediate_size=16,
-        num_hidden_layers=1,
+        num_hidden_layers=2,
         num_attention_heads=2,
         hidden_act="silu",
         max_position_embeddings=16,
