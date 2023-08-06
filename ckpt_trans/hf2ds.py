@@ -22,4 +22,9 @@ print(ds_module.keys())
 
 model_dir = f"hf2as_layer{num_layers}"
 os.makedirs(model_dir, exist_ok=True)
+
+with open(os.path.join(model_dir, "latest"), 'w') as f:
+    f.write("release")
+model_dir = os.path.join(model_dir, "release")
+os.makedirs(model_dir, exist_ok=True)
 torch.save(ds_model, os.path.join(model_dir, "mp_rank_00_model_states.pt"))

@@ -123,8 +123,9 @@ def prepare_model():
     # 2. 保证输入input_ids一致
     # 3. 保证单步的output一致  这里最关键
     # 后续的不同只能是优化器，或者框架中含有额外的操作
-    # model_engine.load_checkpoint(args.checkpoint_saving_path, load_module_strict=True, load_optimizer_states=False,
-    #                              load_lr_scheduler_states=False, load_module_only=True)
+    ckpt_dir = "./ckpt_trans/hf2as_layer1"
+    model_engine.load_checkpoint(ckpt_dir, load_module_strict=True, load_optimizer_states=False,
+                                 load_lr_scheduler_states=False, load_module_only=True)
     return model_engine
 
 
@@ -147,6 +148,6 @@ if __name__ == "__main__":
     while True:
         train(data_engine, model_engine)
         epoch += 1
-        model_engine.save_checkpoint(f"{args.checkpoint_saving_path}",
-                                     tag=f"Epoch-{epoch}")
+        # model_engine.save_checkpoint(f"{args.checkpoint_saving_path}",
+        #                              tag=f"Epoch-{epoch}")
         break
