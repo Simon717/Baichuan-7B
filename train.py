@@ -53,6 +53,7 @@ def get_argument_parser():
 arg_parser = get_argument_parser()
 arg_parser = deepspeed.add_config_arguments(arg_parser)
 args = arg_parser.parse_args()
+
 deepspeed.init_distributed()
 
 
